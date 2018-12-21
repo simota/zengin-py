@@ -31,7 +31,9 @@ def load():
     banks = _load_json('banks.json')
     for bank_code, bank_dict in sorted(banks.items(), key=lambda x: x[0]):
         if bank_code in BANK_NAMES:
-            bank_dict['name'] = BANK_NAMES[bank_code]
+            bank_dict['fullname'] = BANK_NAMES[bank_code]
+        else:
+            bank_dict['fullname'] = bank_dict['name']
         bank = Bank(**bank_dict)
 
         branches = _load_json('branches', '{0}.json'.format(bank.code))
