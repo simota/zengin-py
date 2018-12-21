@@ -17,24 +17,35 @@ class TestBank(object):
 
     def test_get(self):
         cls = self._get_target_class()
-        b1 = cls(9999, u'試験', u'テスト', u'てすと', 'Test')
+        b1 = cls(9999, u'試験', u'テスト', u'てすと', 'Test', u'テスト')
         assert b1 is cls[9999]
 
     def test_bank_by_name(self):
         cls = self._get_target_class()
-        b1 = cls(9999, u'試験', u'テスト', u'てすと', 'Test')
-        assert b1.name == cls.by_name('試験').name
+        b1 = cls(9999, u'試験', u'テスト', u'てすと', 'Test', u'試験銀行')
+        assert b1.code == cls.by_name('試験').code
+        assert b1.code == cls.by_name('試験銀行').code
 
     def test_branch_by_name(self):
         from zengin_code import Branch
 
         cls = self._get_target_class()
-        b1 = cls(9999, u'試験', u'テスト', u'てすと', 'Test')
-        branch = Branch(b1, 999, u'試験支店', u'テスト', u'てすと', 'Test')
+        b1 = cls(9999, u'試験', u'テスト', u'てすと', 'Test', u'テスト')
+        branch = Branch(b1, '999', u'試験支店', u'テスト', u'てすと', 'Test')
         b1.add_branch(branch)
         assert branch.code == b1.branch_by_name('試験支店').code
+
+    def test_branch_by_code(self):
+        from zengin_code import Branch
+
+        cls = self._get_target_class()
+        b1 = cls(9999, u'試験', u'テスト', u'てすと', 'Test', u'テスト')
+        branch = Branch(b1, '999', u'試験支店', u'テスト', u'てすと', 'Test')
+        b1.add_branch(branch)
+        assert branch.code == b1.branch_by_code('999').code
 
     def test_bank_name(self):
         cls = self._get_target_class()
         bank = cls.all['0001']
-        assert bank.name == 'みずほ銀行'
+        assert bank.name == 'みずほ'
+        assert bank.fullname == 'みずほ銀行'
